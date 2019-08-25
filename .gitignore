@@ -1,0 +1,7 @@
+.DS_Store
+.vscode
+
+# Makefile
+parser.[ch]pp
+tokens.cpp
+spider
