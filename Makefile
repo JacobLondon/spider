@@ -1,21 +1,34 @@
-TARGET=spider
+STARGET=spider
+WTARGET=web
 CC=g++
 
+# target 1
 PARSER=src/grammar/parser
 TOKENS=src/grammar/tokens
 EXPRESSION=src/node/expression
 STATEMENT=src/node/statement
 MAIN=src/main
 
-FILES=$(PARSER).cpp $(TOKENS).cpp \
+SFILES=$(PARSER).cpp $(TOKENS).cpp \
 	$(EXPRESSION).cpp $(STATEMENT).cpp \
 	$(MAIN).cpp
 
-all:
+# target 2
+WEB=build/web
+WFILES=$(WEB).cpp
+
+all: spider web
+
+spider:
 	bison -d -o $(PARSER).cpp $(PARSER).y
 	flex -o $(TOKENS).cpp $(TOKENS).l
-	$(CC) -o $(TARGET) $(FILES)
-	mv $(TARGET) bin/
+	$(CC) -o $(STARGET) $(SFILES)
+	mv $(STARGET) bin/
+
+web:
+	$(CC) -o $(WTARGET) $(WFILES)
+	mv $(WTARGET) bin/
 
 clean:
-	rm -f $(PARSER).cpp $(PARSER).hpp $(TOKENS).cpp bin/$(TARGET)
+	rm -f $(PARSER).cpp $(PARSER).hpp $(TOKENS).cpp \
+		bin/$(STARGET) bin/$(WTARGET)
