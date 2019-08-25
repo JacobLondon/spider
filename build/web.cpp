@@ -1,28 +1,82 @@
 #include <cstdlib>
+#include <fstream>
+#include <iostream>
 #include <string>
 #include <vector>
 
 const std::string SP_EXT = ".sp";
 const std::string SP_BIN = "spider";
-std::string fout = "sp.out.cpp";
-std::string fname = "";
-std::string command = "";
+std::string generated_fname = "sp.out.cpp";
+std::string spider_fname = "";
+std::string bin_fname = "a.out";
+bool make = false;
+bool clean = false;
+bool run = false;
 
 int main(int argc, char** argv)
 {
     std::vector<std::string> args(argv + 1, argv + argc);
+    std::string command = "";
 
+    // parse arguments
     for (int i = 0; i < args.size(); i++) {
+        // find spider file extension
         if (args[i].find(SP_EXT) != std::string::npos)
-            fname = args[i];
-        else if (args[i] == "-o") {
-            fout = args[++i];
-        }
+            spider_fname = args[i];
 
+        // parse optional args
+        else if (args[i][0] == '-') {
+            switch(args[i][1]) {
+            case 'c':
+                clean = true;
+                break;
+            case 'g':
+                if (i + 1 < argc && args[i + 1][0] != '-') generated_fname = args[++i]; // else default
+                break;
+            case 'o':
+                make = true;
+                if (i + 1 < argc && args[i + 1][0] != '-') bin_fname = args[++i]; // else default
+                break;
+            case 'r':
+                run = true;
+                break;
+            }
+        }
     }
 
-    command += "cat " + fname + " | " + SP_BIN + " " + fname + " > " + fout;
+    if (spider_fname == "") {
+        std::cerr << "Spider input file missing from argument list." << std::endl;
+        exit(-1);
+    }
 
+    // generate cpp file
+    command += "cat " + spider_fname + " | " + SP_BIN + " " + spider_fname + " > " + generated_fname;
     system(command.c_str());
+
+    std::string cleaner = "rm " + generated_fname + " Makefile";
+
+    // generate Makefile
+    if (make) {
+        std::ofstream makefile;
+        makefile.open("Makefile");
+        makefile << "CC=g++\n"
+                 << "TARGET=" + bin_fname + "\n"
+                 << "all:\n"
+                 << "\t$(CC) -o " + bin_fname + " " + generated_fname + "\n"
+                 << "clean:\n"
+                 << "\t" + cleaner + "\n";
+        makefile.close();
+        system("make");
+    }
+
+    if (clean) {
+        system(cleaner.c_str());
+    }
+
+    if (run) {
+        command = "./" + bin_fname;
+        system(command.c_str());
+    }
+
     return 0;
 }

@@ -5,7 +5,10 @@
 parser.[ch]pp
 tokens.cpp
 
+# binaries
 spider
 web
+test
 
+# web generated files
 sp.out.cpp
