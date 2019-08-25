@@ -11,7 +11,7 @@ std::string NBlock::code_gen()
 
 std::string NStatement::code_gen()
 {
-    return "STATEMENT";
+    return "UNEXPECTED STATEMENT";
 }
 
 std::string NExpressionStatement::code_gen()

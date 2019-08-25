@@ -1,12 +1,12 @@
 %{
-    #include "node/__init__.hpp"
+    #include "../node/__init__.hpp"
     #include <cstdio>
     NBlock* root_block;
     extern int yylex();
     void yyerror(const char* s) { printf("Error: %s\n", s); }
 %}
 
-%code requires { #include "node/__init__.hpp" }
+%code requires { #include "../node/__init__.hpp" }
 
 %union {
     Node*                               node;

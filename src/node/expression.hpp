@@ -9,7 +9,7 @@ using Expressions = std::vector<NExpression *>;
 
 class NExpression : public Node {
 public:
-    std::string code_gen();
+    virtual std::string code_gen();
 };
 
 /**
@@ -20,14 +20,14 @@ class NInteger : public NExpression {
 public:
     long long value;
     NInteger(long long value) : value(value) {}
-    std::string code_gen();
+    virtual std::string code_gen();
 };
 
 class NDouble : public NExpression {
 public:
     double value;
     NDouble(double value) : value(value) {}
-    std::string code_gen();
+    virtual std::string code_gen();
 };
 
 /**
@@ -40,7 +40,7 @@ public:
     NExpression& lhs;
     NExpression& rhs;
     NBinaryOperator(NExpression& lhs, int op, NExpression& rhs) : lhs(lhs), op(op), rhs(rhs) {}
-    std::string code_gen();
+    virtual std::string code_gen();
 };
 
 /**
@@ -51,7 +51,7 @@ class NIdentifier : public NExpression {
 public:
     std::string name;
     NIdentifier(const std::string& name) : name(name) {}
-    std::string code_gen();
+    virtual std::string code_gen();
 };
 
 class NAssignment : public NExpression {
@@ -59,7 +59,7 @@ public:
     NIdentifier& id;
     NExpression& value;
     NAssignment(NIdentifier& id, NExpression value) : id(id), value(value) {}
-    std::string code_gen();
+    virtual std::string code_gen();
 };
 
 class NMethodCall : public NExpression {
@@ -68,5 +68,5 @@ public:
     Expressions args;
     NMethodCall(NIdentifier& id, Expressions& args) : id(id), args(args) {}
     NMethodCall(NIdentifier& id) : id(id) {}
-    std::string code_gen();
+    virtual std::string code_gen();
 };

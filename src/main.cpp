@@ -1,5 +1,5 @@
 #include <iostream>
-#include "parser.hpp"
+#include "grammar/parser.hpp"
 extern NBlock* root_block;
 extern int yyparse();
 
