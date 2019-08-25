@@ -45,7 +45,7 @@
 %%
 
 program
-    : stmts                         { root_block = $1; }
+    : stmts                             { root_block = $1; }
     ;
 
 stmts
