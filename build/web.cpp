@@ -13,10 +13,20 @@ bool make = false;
 bool clean = false;
 bool run = false;
 
+void argparse(int argc, char** argv);
+void build();
+
 int main(int argc, char** argv)
 {
+    argparse(argc, argv);
+    build();
+
+    return 0;
+}
+
+void argparse(int argc, char** argv)
+{
     std::vector<std::string> args(argv + 1, argv + argc);
-    std::string command = "";
 
     // parse arguments
     for (int i = 0; i < args.size(); i++) {
@@ -48,6 +58,11 @@ int main(int argc, char** argv)
         std::cerr << "Spider input file missing from argument list." << std::endl;
         exit(-1);
     }
+}
+
+void build()
+{
+    std::string command = "";
 
     // generate cpp file
     command += "cat " + spider_fname + " | " + SP_BIN + " " + spider_fname + " > " + generated_fname;
@@ -77,6 +92,4 @@ int main(int argc, char** argv)
         command = "./" + bin_fname;
         system(command.c_str());
     }
-
-    return 0;
 }
