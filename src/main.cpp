@@ -6,6 +6,7 @@ extern int yyparse();
 int main(int argc, char** argv)
 {
     yyparse();
-    std::cout << root_block->code_gen() << std::endl;
+    std::cout << "#include <iostream>\n"
+              << root_block->code_gen() << std::endl;
     return 0;
 }

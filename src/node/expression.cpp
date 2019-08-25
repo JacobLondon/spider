@@ -58,13 +58,25 @@ std::string NAssignment::code_gen()
 
 std::string NMethodCall::code_gen()
 {
-    std::string builder = "";
-    builder += id.code_gen() + "(";
-    for (int i = 0; i < args.size(); i++) {
-        builder += args[i]->code_gen();
-        // put a comma after unless it's the last item
-        if (i != args.size() - 1) builder += ",";
+    std::string builder = id.code_gen();
+
+    if (builder == "print") {
+        builder = "std::cout << ";
+        for (int i = 0; i < args.size(); i++) {
+            builder += args[i]->code_gen();
+            builder += "<< \" \" <<";
+        }
+        builder += "std::endl;";
     }
-    builder += ")";
+    else {
+        builder += "(";
+        for (int i = 0; i < args.size(); i++) {
+            builder += args[i]->code_gen();
+            // put a comma after unless it's the last item
+            if (i != args.size() - 1) builder += ",";
+        }
+        builder += ");";
+    }
+
     return builder;
 }

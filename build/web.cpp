@@ -79,7 +79,7 @@ void build()
                  << "all:\n"
                  << "\t$(CC) -o " + bin_fname + " " + generated_fname + "\n"
                  << "clean:\n"
-                 << "\t" + cleaner + "\n";
+                 << "\t" + cleaner + " " + bin_fname + "\n";
         makefile.close();
         system("make");
     }
