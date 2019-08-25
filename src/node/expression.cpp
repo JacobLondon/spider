@@ -61,10 +61,10 @@ std::string NMethodCall::code_gen()
     std::string builder = id.code_gen();
 
     if (builder == "print") {
-        builder = "std::cout << ";
+        builder = "std::cout<<";
         for (int i = 0; i < args.size(); i++) {
             builder += args[i]->code_gen();
-            builder += "<< \" \" <<";
+            builder += "<<\" \"<<";
         }
         builder += "std::endl;";
     }
