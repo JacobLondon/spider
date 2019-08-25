@@ -8,6 +8,8 @@ class NExpression;
 using Expressions = std::vector<NExpression *>;
 
 class NExpression : public Node {
+public:
+    std::string code_gen();
 };
 
 /**
@@ -62,9 +64,9 @@ public:
 
 class NMethodCall : public NExpression {
 public:
-    const NIdentifier& id;
+    NIdentifier& id;
     Expressions args;
-    NMethodCall(const NIdentifier& id, Expressions& args) : id(id), args(args) {}
-    NMethodCall(const NIdentifier& id) : id(id) {}
+    NMethodCall(NIdentifier& id, Expressions& args) : id(id), args(args) {}
+    NMethodCall(NIdentifier& id) : id(id) {}
     std::string code_gen();
 };

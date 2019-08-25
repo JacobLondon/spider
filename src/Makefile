@@ -3,9 +3,13 @@ CC=g++
 
 PARSER=parser
 TOKENS=tokens
+EXPRESSION=node/expression
+STATEMENT=node/statement
 MAIN=main
 
-FILES=$(PARSER).cpp $(TOKENS).cpp $(MAIN).cpp
+FILES=$(PARSER).cpp $(TOKENS).cpp \
+	$(EXPRESSION).cpp $(STATEMENT).cpp \
+	$(MAIN).cpp
 
 all:
 	bison -d -o $(PARSER).cpp $(PARSER).y

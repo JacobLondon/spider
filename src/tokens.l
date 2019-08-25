@@ -1,6 +1,5 @@
 %{
 #include <string>
-#include "node/__init__.hpp"
 #include "parser.hpp"
 #define SAVE_TOKEN yylval.string = new std::string(yytext, yyleng)
 #define TOKEN(t) (yylval.token = t)

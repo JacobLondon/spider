@@ -1,10 +1,12 @@
 %{
     #include "node/__init__.hpp"
-    NBlock *root_block; // root node of program AST
-
+    #include <cstdio>
+    NBlock* root_block;
     extern int yylex();
     void yyerror(const char* s) { printf("Error: %s\n", s); }
 %}
+
+%code requires { #include "node/__init__.hpp" }
 
 %union {
     Node*                               node;
@@ -42,9 +44,10 @@
 
 %%
 
-program : stmts                         { root_block = $1; }
-        ;
-        
+program
+    : stmts                         { root_block = $1; }
+    ;
+
 stmts
     : stmt                              { $$ = new NBlock(); $$->statements.push_back($<stmt>1); }
     | stmts stmt                        { $1->statements.push_back($<stmt>2); }

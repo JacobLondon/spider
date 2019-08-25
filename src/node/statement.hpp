@@ -24,6 +24,8 @@ public:
  */
 
 class NStatement : public Node {
+public:
+    std::string code_gen();
 };
 
 class NExpressionStatement : public NStatement {
@@ -35,21 +37,21 @@ public:
 
 class NVariableDeclaration : public NStatement {
 public:
-    const NIdentifier& type;
+    NIdentifier& type;
     NIdentifier& id;
     NExpression* expression;
-    NVariableDeclaration(const NIdentifier& type, NIdentifier& id) : type(type), id(id) {}
-    NVariableDeclaration(const NIdentifier& type, NIdentifier& id, NExpression* expression) : type(type), id(id), expression(expression) {}
+    NVariableDeclaration(NIdentifier& type, NIdentifier& id) : type(type), id(id), expression(NULL) {}
+    NVariableDeclaration(NIdentifier& type, NIdentifier& id, NExpression* expression) : type(type), id(id), expression(expression) {}
     std::string code_gen();
 };
 
 class NFunctionDeclaration : public NStatement {
 public:
-    const NIdentifier& type;
-    const NIdentifier& id;
+    NIdentifier& type;
+    NIdentifier& id;
     Variables args;
     NBlock& block;
-    NFunctionDeclaration(const NIdentifier& type, const NIdentifier& id, const Variables& args, NBlock& block) :
+    NFunctionDeclaration( NIdentifier& type, NIdentifier& id, Variables& args, NBlock& block) :
         type(type), id(id), args(args), block(block) {}
     std::string code_gen();
 };
