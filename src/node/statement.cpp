@@ -48,3 +48,11 @@ std::string NIfDeclaration::code_gen()
     builder += ") {" + block.code_gen() + "}";
     return builder;
 }
+
+std::string NWhileDeclaration::code_gen()
+{
+    std::string builder = "while(";
+    builder += expression->code_gen();
+    builder += ") {" + block.code_gen() + "}";
+    return builder;
+}

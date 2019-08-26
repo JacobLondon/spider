@@ -63,3 +63,11 @@ public:
     NIfDeclaration(NExpression* expression, NBlock& block) : expression(expression), block(block) {}
     virtual std::string code_gen();
 };
+
+class NWhileDeclaration : public NStatement {
+public:
+    NExpression* expression;
+    NBlock& block;
+    NWhileDeclaration(NExpression* expression, NBlock& block) : expression(expression), block(block) {}
+    virtual std::string code_gen();
+};

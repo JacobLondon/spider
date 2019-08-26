@@ -6,4 +6,7 @@ def main() -> int {
     if a == 10 {
         print(1)
     }
+    while a == 10 {
+        
+    }
 }

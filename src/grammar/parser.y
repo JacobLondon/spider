@@ -25,7 +25,7 @@
 %token <string> TIDENTIFIER TINTEGER TDOUBLE
 %token <token>  TCEQ TCNE TCLT TCLE TCGT TCGE TEQUAL
 %token <token>  TLPAREN TRPAREN TLBRACE TRBRACE TCOMMA TDOT TCOLON TRARROW
-%token <token>  TDEF TIF
+%token <token>  TDEF TIF TWHILE
 %token <token>  TPLUS TMINUS TMUL TDIV
 
 /* nonterminal symbols */
@@ -34,7 +34,7 @@
 %type <varvec>  func_decl_args
 %type <exprvec> call_args
 %type <block>   program stmts block
-%type <stmt>    stmt var_decl func_decl if_decl
+%type <stmt>    stmt var_decl func_decl if_decl while_decl
 %type <token>   comparison
 
 /* operator precedence */
@@ -57,6 +57,7 @@ stmts
 stmt
     : var_decl
     | if_decl
+    | while_decl
     | func_decl
     | expr                              { $$ = new NExpressionStatement(*$1); }
     ;
@@ -84,9 +85,11 @@ func_decl_args
     ;
 
 if_decl
-    : TIF expr[E] block[B]
-                                        { $$ = new NIfDeclaration($E, *$B); }
+    : TIF expr[E] block[B]              { $$ = new NIfDeclaration($E, *$B); }
     ;
+
+while_decl
+    : TWHILE expr[E] block[B]           { $$ = new NWhileDeclaration($E, *$B); }
 
 ident
     : TIDENTIFIER                       { $$ = new NIdentifier(*$1); delete $1; }
