@@ -59,7 +59,7 @@ stmt
     | expr                              { $$ = new NExpressionStatement(*$1); }
     ;
 
-block 
+block
     : TLBRACE stmts TRBRACE             { $$ = $2; }
     | TLBRACE TRBRACE                   { $$ = new NBlock(); }
     ;
