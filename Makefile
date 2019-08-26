@@ -18,18 +18,21 @@ SFILES=$(PARSER).cpp $(TOKENS).cpp \
 WEB=build/web
 WFILES=$(WEB).cpp
 
-.PHONY: all spider web clean
+.PHONY: all prepare spider web clean
 
 all: spider web
+
+prepare:
 	mkdir -p bin
 
-spider:
+spider: prepare
 	bison -d -o $(PARSER).cpp $(PARSER).y
 	flex -o $(TOKENS).cpp $(TOKENS).l
 	$(CC) -o $(STARGET) $(SFILES) $(CFLAGS)
+	
 	mv $(STARGET) bin/
 
-web:
+web: prepare
 	$(CC) -o $(WTARGET) $(WFILES) $(CFLAGS)
 	mv $(WTARGET) bin/
 
