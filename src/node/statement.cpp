@@ -40,3 +40,11 @@ std::string NFunctionDeclaration::code_gen()
     builder += ") {\n" + block.code_gen() + "}";
     return builder;
 }
+
+std::string NIfDeclaration::code_gen()
+{
+    std::string builder = "if(";
+    builder += expression->code_gen();
+    builder += ") {" + block.code_gen() + "}";
+    return builder;
+}

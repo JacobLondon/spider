@@ -24,8 +24,8 @@
 /* terminal symbols */
 %token <string> TIDENTIFIER TINTEGER TDOUBLE
 %token <token>  TCEQ TCNE TCLT TCLE TCGT TCGE TEQUAL
-%token <token>  TLPAREN TRPAREN TLBRACE TRBRACE TCOMMA TDOT TCOLON
-%token <token>  TRARROW TDEF
+%token <token>  TLPAREN TRPAREN TLBRACE TRBRACE TCOMMA TDOT TCOLON TRARROW
+%token <token>  TDEF TIF
 %token <token>  TPLUS TMINUS TMUL TDIV
 
 /* nonterminal symbols */
@@ -34,7 +34,7 @@
 %type <varvec>  func_decl_args
 %type <exprvec> call_args
 %type <block>   program stmts block
-%type <stmt>    stmt var_decl func_decl
+%type <stmt>    stmt var_decl func_decl if_decl
 %type <token>   comparison
 
 /* operator precedence */
@@ -56,6 +56,7 @@ stmts
 
 stmt
     : var_decl
+    | if_decl
     | func_decl
     | expr                              { $$ = new NExpressionStatement(*$1); }
     ;
@@ -80,6 +81,11 @@ func_decl_args
     : /* no args */                     { $$ = new Variables(); }
     | var_decl                          { $$ = new Variables(); $$->push_back($<var_decl>1); }
     | func_decl_args TCOMMA var_decl    { $1->push_back($<var_decl>3); }
+    ;
+
+if_decl
+    : TIF TLPAREN expr[E] TRPAREN block[B]
+                                        { $$ = new NIfDeclaration($E, *$B); }
     ;
 
 ident

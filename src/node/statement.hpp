@@ -55,3 +55,11 @@ public:
         type(type), id(id), args(args), block(block) {}
     virtual std::string code_gen();
 };
+
+class NIfDeclaration : public NStatement {
+public:
+    NExpression* expression;
+    NBlock& block;
+    NIfDeclaration(NExpression* expression, NBlock& block) : expression(expression), block(block) {}
+    virtual std::string code_gen();
+};
