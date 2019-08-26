@@ -84,7 +84,7 @@ func_decl_args
     ;
 
 if_decl
-    : TIF TLPAREN expr[E] TRPAREN block[B]
+    : TIF expr[E] block[B]
                                         { $$ = new NIfDeclaration($E, *$B); }
     ;
 
