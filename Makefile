@@ -26,7 +26,7 @@ prepare:
 	mkdir -p bin
 
 web: prepare
-	bison -d -o $(PARSER).cpp $(PARSER).y
+	bison -d -v -o $(PARSER).cpp $(PARSER).y
 	flex -o $(TOKENS).cpp $(TOKENS).l
 	$(CC) -o $(WTARGET) $(SFILES) $(CFLAGS)
 	

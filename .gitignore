@@ -3,6 +3,7 @@
 
 # Makefile
 parser.[ch]pp
+*.output
 tokens.cpp
 
 # binaries

@@ -38,70 +38,80 @@
 %type <token>   comparison
 
 /* operator precedence */
+%left TCOMMA
+%right TEQUAL
+%left TCEQ TCNE
+%left TCGT TCGE
+%left TCLT TCLE
 %left TPLUS TMINUS
 %left TMUL TDIV
+%left TDOT TCOLON
+%left TLPAREN TRPAREN
 
 %start program
 
 %%
 
-program
-    : stmts                             { root_block = $1; }
+program:
+      stmts                             { root_block = $1; }
     ;
 
-stmts
-    : stmt                              { $$ = new NBlock(); $$->statements.push_back($<stmt>1); }
+stmts:
+      stmt                              { $$ = new NBlock(); $$->statements.push_back($<stmt>1); }
     | stmts stmt                        { $1->statements.push_back($<stmt>2); }
     ;
 
-stmt
-    : var_decl
+stmt:
+      var_decl
     | if_decl
     | while_decl
     | func_decl
     | expr                              { $$ = new NExpressionStatement(*$1); }
     ;
 
-block
-    : TLBRACE stmts TRBRACE             { $$ = $2; }
+block:
+      TLBRACE stmts TRBRACE             { $$ = $2; }
     | TLBRACE TRBRACE                   { $$ = new NBlock(); }
     ;
 
-var_decl
-    : ident[V] TCOLON ident[T]          { $$ = new NVariableDeclaration(*$T, *$V); }
-    | ident[V] TCOLON ident[T] TEQUAL expr[E]
+/* shift/reduce conflict - ident TCOLON ident*/
+var_decl:
+      ident[V] TCOLON ident[T] TEQUAL expr[E]
                                         { $$ = new NVariableDeclaration(*$T, *$V, $E); }
+    | ident[V] TCOLON ident[T]          { $$ = new NVariableDeclaration(*$T, *$V); }
     ;
 
-func_decl
-    : TDEF ident[N] TLPAREN func_decl_args[A] TRPAREN TRARROW ident[T] block[B]
+func_decl:
+      TDEF ident[N] TLPAREN func_decl_args[A] TRPAREN TRARROW ident[T] block[B]
                                         { $$ = new NFunctionDeclaration(*$T, *$N, *$A, *$B); delete $A; }
     ;
 
-func_decl_args
-    : /* no args */                     { $$ = new Variables(); }
+func_decl_args:
+      /* no args */                     { $$ = new Variables(); }
     | var_decl                          { $$ = new Variables(); $$->push_back($<var_decl>1); }
     | func_decl_args TCOMMA var_decl    { $1->push_back($<var_decl>3); }
     ;
 
-if_decl
-    : TIF expr[E] block[B]              { $$ = new NIfDeclaration($E, *$B); }
+if_decl:
+      TIF expr[E] block[B]              { $$ = new NIfDeclaration($E, *$B); }
     ;
 
-while_decl
-    : TWHILE expr[E] block[B]           { $$ = new NWhileDeclaration($E, *$B); }
-
-ident
-    : TIDENTIFIER                       { $$ = new NIdentifier(*$1); delete $1; }
+while_decl:
+      TWHILE expr[E] block[B]           { $$ = new NWhileDeclaration($E, *$B); }
     ;
 
-numeric
-    : TINTEGER                          { $$ = new NInteger(atol($1->c_str())); delete $1; }
+ident:
+      TIDENTIFIER                       { $$ = new NIdentifier(*$1); delete $1; }
+    ;
+
+numeric:
+      TINTEGER                          { $$ = new NInteger(atol($1->c_str())); delete $1; }
     | TDOUBLE                           { $$ = new NDouble(atof($1->c_str())); delete $1; }
     ;
-    
-expr
-    : ident TEQUAL expr                 { $$ = new NAssignment(*$<ident>1, *$3); }
+
+/* shift/reduce conflict - ident */
+expr:
+      ident TEQUAL expr                 { $$ = new NAssignment(*$<ident>1, *$3); }
     | ident TLPAREN call_args TRPAREN   { $$ = new NMethodCall(*$1, *$3); delete $3; }
     | ident                             { $<ident>$ = $1; }
     | numeric
@@ -109,14 +119,14 @@ expr
     | TLPAREN expr TRPAREN              { $$ = $2; }
     ;
 
-call_args
-    : /* no args */                     { $$ = new Expressions(); }
+call_args:
+      /* no args */                     { $$ = new Expressions(); }
     | expr                              { $$ = new Expressions(); $$->push_back($1); }
     | call_args TCOMMA expr             { $1->push_back($3); }
     ;
 
-comparison
-    : TCEQ | TCNE | TCLT | TCLE | TCGT | TCGE 
+comparison:
+      TCEQ | TCNE | TCLT | TCLE | TCGT | TCGE 
     | TPLUS | TMINUS | TMUL | TDIV
     ;
 
