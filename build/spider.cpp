@@ -9,7 +9,7 @@ const std::string WEB_BIN = "web";
 std::string generated_fname = "sp.out.cpp";
 std::string spider_fname = "";
 std::string bin_fname = "a.out";
-bool make = false;
+bool compile = false;
 bool clean = false;
 bool run = false;
 
@@ -37,16 +37,20 @@ void argparse(int argc, char** argv)
         // parse optional args
         else if (args[i][0] == '-') {
             switch(args[i][1]) {
+            // specify to compile the generated file
             case 'c':
                 clean = true;
                 break;
+            // specify generated_fname
             case 'g':
                 if (i + 1 < argc && args[i + 1][0] != '-') generated_fname = args[++i]; // else default
                 break;
+            // specify to compile and allow a bin name
             case 'o':
-                make = true;
+                compile = true;
                 if (i + 1 < argc && args[i + 1][0] != '-') bin_fname = args[++i]; // else default
                 break;
+            // specify to run the binary after compiling it
             case 'r':
                 run = true;
                 break;
@@ -68,28 +72,19 @@ void build()
     command += "cat " + spider_fname + " | " + WEB_BIN + " " + spider_fname + " > " + generated_fname;
     system(command.c_str());
 
-    std::string cleaner = "rm " + generated_fname + " Makefile";
-
     // generate Makefile
-    if (make) {
-        std::ofstream makefile;
-        makefile.open("Makefile");
-        makefile << "CC=g++\n"
-                 << "TARGET=" + bin_fname + "\n"
-                 << "all:\n"
-                 << "\t$(CC) -o " + bin_fname + " " + generated_fname + "\n"
-                 << "clean:\n"
-                 << "\t" + cleaner + " " + bin_fname + "\n";
-        makefile.close();
-        system("make");
-    }
-
-    if (clean) {
-        system(cleaner.c_str());
+    if (compile) {
+        command = "g++ " + generated_fname + " -o " + bin_fname;
+        system(command.c_str());
     }
 
     if (run) {
         command = "./" + bin_fname;
+        system(command.c_str());
+    }
+
+    if (clean) {
+        command = "rm " + generated_fname + " " + bin_fname;
         system(command.c_str());
     }
 }
