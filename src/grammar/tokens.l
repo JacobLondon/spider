@@ -12,9 +12,11 @@ extern "C" int yywrap() {return 1;}
 %%
 
 [ \t\r\n]               ;
+"def"                   return TOKEN(TDEF);
 [a-zA-Z_][a-zA-Z0-9_]*  SAVE_TOKEN; return TIDENTIFIER;
 [0-9]+\.[0-9]*          SAVE_TOKEN; return TDOUBLE;
 [0-9]+                  SAVE_TOKEN; return TINTEGER;
+"->"                    return TOKEN(TRARROW);
 "="                     return TOKEN(TEQUAL);
 "=="                    return TOKEN(TCEQ);
 "!="                    return TOKEN(TCNE);
@@ -32,6 +34,7 @@ extern "C" int yywrap() {return 1;}
 "-"                     return TOKEN(TMINUS);
 "*"                     return TOKEN(TMUL);
 "/"                     return TOKEN(TDIV);
+":"                     return TOKEN(TCOLON);
 .                       std::cerr << "Line " << yylineno << ": unexpected token '" << yytext << "'" << std::endl; exit(-1);
 
 %%

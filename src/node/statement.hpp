@@ -51,7 +51,7 @@ public:
     NIdentifier& id;
     Variables args;
     NBlock& block;
-    NFunctionDeclaration( NIdentifier& type, NIdentifier& id, Variables& args, NBlock& block) :
+    NFunctionDeclaration(NIdentifier& type, NIdentifier& id, Variables& args, NBlock& block) :
         type(type), id(id), args(args), block(block) {}
     virtual std::string code_gen();
 };

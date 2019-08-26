@@ -24,7 +24,8 @@
 /* terminal symbols */
 %token <string> TIDENTIFIER TINTEGER TDOUBLE
 %token <token>  TCEQ TCNE TCLT TCLE TCGT TCGE TEQUAL
-%token <token>  TLPAREN TRPAREN TLBRACE TRBRACE TCOMMA TDOT
+%token <token>  TLPAREN TRPAREN TLBRACE TRBRACE TCOMMA TDOT TCOLON
+%token <token>  TRARROW TDEF
 %token <token>  TPLUS TMINUS TMUL TDIV
 
 /* nonterminal symbols */
@@ -65,13 +66,14 @@ block
     ;
 
 var_decl
-    : ident ident                       { $$ = new NVariableDeclaration(*$1, *$2); }
-    | ident ident TEQUAL expr           { $$ = new NVariableDeclaration(*$1, *$2, $4); }
+    : ident[V] TCOLON ident[T]          { $$ = new NVariableDeclaration(*$T, *$V); }
+    | ident[V] TCOLON ident[T] TEQUAL expr[E]
+                                        { $$ = new NVariableDeclaration(*$T, *$V, $E); }
     ;
 
 func_decl
-    : ident ident TLPAREN func_decl_args TRPAREN block
-                                        { $$ = new NFunctionDeclaration(*$1, *$2, *$4, *$6); delete $4; }
+    : TDEF ident[N] TLPAREN func_decl_args[A] TRPAREN TRARROW ident[T] block[B]
+                                        { $$ = new NFunctionDeclaration(*$T, *$N, *$A, *$B); delete $A; }
     ;
 
 func_decl_args
