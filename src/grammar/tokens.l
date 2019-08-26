@@ -1,9 +1,10 @@
 %{
+#include <iostream>
 #include <string>
 #include "parser.hpp"
 #define SAVE_TOKEN yylval.string = new std::string(yytext, yyleng)
 #define TOKEN(t) (yylval.token = t)
-extern "C" int yywrap() { }
+extern "C" int yywrap() {return 1;}
 %}
 
 %option yylineno
@@ -31,6 +32,6 @@ extern "C" int yywrap() { }
 "-"                     return TOKEN(TMINUS);
 "*"                     return TOKEN(TMUL);
 "/"                     return TOKEN(TDIV);
-.                       printf("Line %d: unexpected token '%s'\n", yylineno, yytext); yyterminate();
+.                       std::cerr << "Line " << yylineno << ": unexpected token '" << yytext << "'" << std::endl; exit(-1);
 
 %%

@@ -5,7 +5,7 @@
 #include <vector>
 
 const std::string SP_EXT = ".sp";
-const std::string SP_BIN = "spider";
+const std::string WEB_BIN = "web";
 std::string generated_fname = "sp.out.cpp";
 std::string spider_fname = "";
 std::string bin_fname = "a.out";
@@ -65,7 +65,7 @@ void build()
     std::string command = "";
 
     // generate cpp file
-    command += "cat " + spider_fname + " | " + SP_BIN + " " + spider_fname + " > " + generated_fname;
+    command += "cat " + spider_fname + " | " + WEB_BIN + " " + spider_fname + " > " + generated_fname;
     system(command.c_str());
 
     std::string cleaner = "rm " + generated_fname + " Makefile";

@@ -15,27 +15,27 @@ SFILES=$(PARSER).cpp $(TOKENS).cpp \
 	$(MAIN).cpp
 
 # target 2
-WEB=build/web
-WFILES=$(WEB).cpp
+SPIDER=build/spider
+WFILES=$(SPIDER).cpp
 
 .PHONY: all prepare spider web clean
 
-all: spider web
+all: web spider
 
 prepare:
 	mkdir -p bin
 
-spider: prepare
+web: prepare
 	bison -d -o $(PARSER).cpp $(PARSER).y
 	flex -o $(TOKENS).cpp $(TOKENS).l
-	$(CC) -o $(STARGET) $(SFILES) $(CFLAGS)
+	$(CC) -o $(WTARGET) $(SFILES) $(CFLAGS)
 	
-	mv $(STARGET) bin/
-
-web: prepare
-	$(CC) -o $(WTARGET) $(WFILES) $(CFLAGS)
 	mv $(WTARGET) bin/
+
+spider: prepare
+	$(CC) -o $(STARGET) $(WFILES) $(CFLAGS)
+	mv $(STARGET) bin/
 
 clean:
 	rm -f $(PARSER).cpp $(PARSER).hpp $(TOKENS).cpp \
-		bin/$(STARGET) bin/$(WTARGET)
+		bin/$(WTARGET) bin/$(STARGET)
