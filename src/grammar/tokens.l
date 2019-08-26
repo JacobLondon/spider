@@ -19,8 +19,8 @@ extern "C" int yywrap() {return 1;}
 [0-9]+\.[0-9]*          SAVE_TOKEN; return TDOUBLE;
 [0-9]+                  SAVE_TOKEN; return TINTEGER;
 "->"                    return TOKEN(TRARROW);
-"="                     return TOKEN(TEQUAL);
 "=="                    return TOKEN(TCEQ);
+"="                     return TOKEN(TEQUAL);
 "!="                    return TOKEN(TCNE);
 "<"                     return TOKEN(TCLT);
 "<="                    return TOKEN(TCLE);
